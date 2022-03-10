@@ -4,7 +4,6 @@ import 'package:assignment/common/widgets.dart';
 import 'package:assignment/custom_icons.dart';
 import 'package:assignment/formate_bike_info_usecase.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
