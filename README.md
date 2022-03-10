@@ -1,16 +1,24 @@
 # assignment
 
-A new Flutter project.
+## Some General notes
 
-## Getting Started
+i tested the app against iphone 13 and pixel 4, however I did implement the ui and animation to work on different screen sizes i didn't test all of the sizes but it should be fine for most part.
 
-This project is a starting point for a Flutter application.
+the background for the bike wasn't in the assets folder for the assignment that's why it's missing.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Too keep things simple i didn't use any special library for json parsing just the manual way.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### resource management
+
+I did use text sizes and style from the theme, however since this was a test i hardcoded things like texts, this would obvously be bad for internationaliztion but it's just for test.
+
+
+### testing
+
+I've written a few unit tests and one widget test,they are not by any means exhaustive, but rather enough to show the point.
+
+### comments
+
+i put some comments in places where i needed to explain why i did something this way instead of maybe a more mature soloution so you know i was aware!.
+
