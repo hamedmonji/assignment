@@ -1,5 +1,5 @@
 import 'package:assignment/bike_viewmodel.dart';
-import 'package:assignment/common/list_extensions.dart';
+import 'package:assignment/common/extensions.dart';
 import 'package:assignment/common/widgets.dart';
 import 'package:assignment/custom_icons.dart';
 import 'package:assignment/formate_bike_info_usecase.dart';

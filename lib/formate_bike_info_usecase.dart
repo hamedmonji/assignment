@@ -1,3 +1,4 @@
+import 'package:assignment/common/extensions.dart';
 import 'package:assignment/data/bike_model.dart';
 
 abstract class BaseBikeInfo {}
@@ -25,7 +26,7 @@ class FormatBikeInfoUseCase {
       BikeInfo('ODO', '${model.odo} km'),
       BikeInfo('Frame number', model.frameNumber),
       BikeInfo('Firmware', model.firmware),
-      BikeInfo('Warranty', '${model.warranty} years'),
+      BikeInfo('Warranty', '${model.warranty.removeDecimalZeroFormat()} years'),
       BikeInfoHeader('Battery'),
       BikeInfo('Charge', "${model.batteryCharge}%"),
       BikeInfo('Type', model.batteryType),
@@ -34,12 +35,14 @@ class FormatBikeInfoUseCase {
       // this part(at what percentage show what) it's hardcoded
       BikeInfo('Health', '${model.batteryHealth}% very good'),
       BikeInfo('Firmware', model.batteryFirmware),
-      BikeInfo('Warranty', '${model.batteryWarranty} years'),
+      BikeInfo('Warranty', '${model.batteryWarranty.removeDecimalZeroFormat()} years'),
       BikeInfoHeader('Motor'),
       BikeInfo('Type', model.motorType),
       BikeInfo('Serial number', model.motorSerialNumber),
       BikeInfo('Firmware', model.motorFirmware),
-      BikeInfo('Warranty', '${model.motorWarranty} years'),
+      BikeInfo('Warranty', '${model.motorWarranty.removeDecimalZeroFormat()} years'),
     ];
   }
+
+
 }
