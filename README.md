@@ -2,7 +2,7 @@
 
 ## Some General notes
 
-i tested the app against iphone 13 and pixel 4, however I did implement the ui and animation to work on different screen sizes i didn't test all of the sizes but it should be fine for most part.
+i tested the app against iphone 13 and pixel 4, however I did implement the ui and animation to work on different screen sizes i didn't test all of the sizes but it should be ok for the most part.
 
 the background for the bike wasn't in the assets folder for the assignment that's why it's missing.
 
