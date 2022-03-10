@@ -5,7 +5,7 @@ class Bike {
   final double warranty;
   final double batteryCharge;
   final String batteryType;
-  final double batteryHealth;
+  final int batteryHealth;
   final String batteryFirmware;
   final double batteryWarranty;
   final String motorType;
@@ -33,16 +33,16 @@ class Bike {
       json['odo'] as int,
       json['frameNumber'] as String,
       json['firmware'] as String,
-      json['warranty'] as double,
-      json['batteryCharge'] as double,
+      double.parse(json['warranty'].toString()),
+      double.parse(json['batteryCharge'].toString()),
       json['batteryType'] as String,
-      json['batteryHealth'] as double,
+      json['batteryHealth'] as int,
       json['batteryFirmware'] as String,
-      json['batteryWarranty'] as double,
+      double.parse(json['batteryWarranty'].toString()),
       json['motorType'] as String,
       json['motorSerialNumber'] as String,
       json['motorFirmware'] as String,
-      json['motorWarranty'] as double,
+      double.parse(json['motorWarranty'].toString()),
     );
   }
 

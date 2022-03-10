@@ -33,25 +33,32 @@ class _BikeDetailsState extends State<BikeDetails>
         body: FutureBuilder<List<BaseBikeInfo>>(
             future: viewModel.getBikeData(),
             builder: (context, snapshot) {
-              //TODO :Create a sectioned list widget maybe
               if (snapshot.hasData) {
                 return _buildPageContent(snapshot.data!);
               } else if (snapshot.hasError) {
                 //TODO show proper error with retry
-                return Container(
-                  color: Colors.red,
-                );
+                return _buildRetryError(snapshot);
               } else {
-                //TODO show progress for the whole page
                 return Center(child: CircularProgressIndicator());
               }
             }));
   }
 
+  Center _buildRetryError(AsyncSnapshot<List<BaseBikeInfo>> snapshot) {
+    return Center(
+      child: TextButton(
+        onPressed: () {
+          setState(() {});
+        },
+        child: Text('${snapshot.error} \n click to retry'),
+      ),
+    );
+  }
+
   Widget _buildPageContent(List<BaseBikeInfo> data) {
     return Stack(
       children: [
-        buildWelcomeAndUpdate(),
+        _buildWelcomeAndUpdate(),
         NotificationListener<UserScrollNotification>(
           onNotification: _onUserScrollNotification,
           child: SingleChildScrollView(
@@ -132,61 +139,58 @@ class _BikeDetailsState extends State<BikeDetails>
               ),
             ),
             transform:
-            Matrix4.translationValues(0, animationController.value, 0),
+                Matrix4.translationValues(0, animationController.value, 0),
           ),
         );
       },
     );
   }
 
-  Widget buildWelcomeAndUpdate() {
+  Widget _buildWelcomeAndUpdate() {
     return Wrap(
+      key: _messageAndUpdateOffstageKey,
       children: [
-        Offstage(
-          offstage: false,
-          key: _messageAndUpdateOffstageKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildProfileIcon(),
-              AnimatedScaleFade(
-                slideOut: _slideOut,
-                alignment: Alignment(0, -0.5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                        child: Text(
-                          'Good afternoon,',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(color: Colors.black),
-                        )),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Center(
-                        child: Text(
-                          'Your bike is looking perfect to ride, watch out for the rain',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.grey),
-                        )),
-                    SizedBox(
-                      height: 36,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: _buildUpdates(),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileIcon(),
+            AnimatedScaleFade(
+              slideOut: _slideOut,
+              alignment: Alignment(0, -0.5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Text(
+                    'Good afternoon,',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium!
+                        .copyWith(color: Colors.black),
+                  )),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Center(
+                      child: Text(
+                    'Your bike is looking perfect to ride, watch out for the rain',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(color: Colors.grey),
+                  )),
+                  SizedBox(
+                    height: 36,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: _buildUpdates(),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ],
     );
@@ -240,7 +244,7 @@ class _BikeDetailsState extends State<BikeDetails>
       itemBuilder: (context, index) {
         final item = data[index];
         if (item is BikeInfoHeader) {
-          return _PaddedHeader(
+          return PaddedHeader(
             heading: item.header,
           );
         } else if (item is BikeInfo) {
@@ -302,11 +306,10 @@ class _BikeDetailsState extends State<BikeDetails>
   }
 }
 
-
-class _PaddedHeader extends StatelessWidget {
+class PaddedHeader extends StatelessWidget {
   final EdgeInsets padding;
 
-  const _PaddedHeader({
+  const PaddedHeader({
     Key? key,
     required this.heading,
     this.padding = const EdgeInsets.only(top: 16.0),
@@ -353,4 +356,3 @@ class _UpArrow extends StatelessWidget {
     );
   }
 }
-
