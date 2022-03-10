@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'data/bike_model.dart';
+import 'bike_model.dart';
 
 class BikeApiEndpoints {
   final String bikeInfoUrl;
 
+  // This would only be the end path in a real world projects
+  // and the base path would be part of the http client configuration.
   const BikeApiEndpoints(
       {this.bikeInfoUrl =
           'https://sp82l5ulp2.execute-api.eu-west-1.amazonaws.com/bikeDetails'});

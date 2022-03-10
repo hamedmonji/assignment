@@ -174,15 +174,18 @@ class _BikeDetailsState extends State<BikeDetails>
                   SizedBox(
                     height: 24,
                   ),
-                  Center(
-                      child: Text(
-                    'Your bike is looking perfect to ride, watch out for the rain',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1!
-                        .copyWith(color: Colors.grey),
-                  )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 42.0),
+                    child: Center(
+                        child: Text(
+                      'Your bike is looking perfect to ride, watch out for the rain',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(color: Colors.grey),
+                    )),
+                  ),
                   SizedBox(
                     height: 36,
                   ),
@@ -316,7 +319,7 @@ class PaddedHeader extends StatelessWidget {
   const PaddedHeader({
     Key? key,
     required this.heading,
-    this.padding = const EdgeInsets.only(top: 16.0),
+    this.padding = const EdgeInsets.only(top: 24.0),
   }) : super(key: key);
 
   final String heading;

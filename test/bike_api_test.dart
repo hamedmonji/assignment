@@ -1,4 +1,4 @@
-import 'package:assignment/bike_service.dart';
+import 'package:assignment/data/bike_service.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
