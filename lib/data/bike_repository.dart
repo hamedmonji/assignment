@@ -1,4 +1,4 @@
-import 'package:assignment/data/bike_service.dart';
+import 'package:assignment/data/bike_api.dart';
 import 'package:assignment/data/bike_model.dart';
 
 class BikeRepository {

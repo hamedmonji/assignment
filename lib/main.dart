@@ -1,5 +1,5 @@
 import 'package:assignment/bike_details/bike_details.dart';
-import 'package:assignment/data/bike_service.dart';
+import 'package:assignment/data/bike_api.dart';
 import 'package:assignment/bike_viewmodel.dart';
 import 'package:assignment/data/bike_repository.dart';
 import 'package:flutter/material.dart';
