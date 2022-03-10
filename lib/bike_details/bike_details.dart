@@ -18,37 +18,44 @@ class _BikeDetailsState extends State<BikeDetails>
   bool _slideOut = false;
   final GlobalKey _messageAndUpdateOffstageKey = GlobalKey();
   late AnimationController animationController;
+  late double _welcomeAndMessageHeight;
+  late Future<List<BaseBikeInfo>> fetchBikeInfoFuture;
 
   @override
   void initState() {
     super.initState();
+    final viewModel = context.read<BikeViewModel>();
+    fetchBikeInfoFuture = viewModel.getBikeData();
     animationController = AnimationController(
         vsync: this, upperBound: 600, duration: Duration(milliseconds: 400));
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<BikeViewModel>();
     return Scaffold(
-        body: FutureBuilder<List<BaseBikeInfo>>(
-            future: viewModel.getBikeData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return _buildPageContent(snapshot.data!);
-              } else if (snapshot.hasError) {
-                //TODO show proper error with retry
-                return _buildRetryError(snapshot);
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }));
+        body: SafeArea(
+      child: FutureBuilder<List<BaseBikeInfo>>(
+          future: fetchBikeInfoFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return _buildPageContent(snapshot.data!);
+            } else if (snapshot.hasError) {
+              //TODO show proper error with retry
+              return _buildRetryError(snapshot);
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
+    ));
   }
 
   Center _buildRetryError(AsyncSnapshot<List<BaseBikeInfo>> snapshot) {
     return Center(
       child: TextButton(
         onPressed: () {
-          setState(() {});
+          setState(() {
+            fetchBikeInfoFuture = context.read<BikeViewModel>().getBikeData();
+          });
         },
         child: Text('${snapshot.error} \n click to retry'),
       ),
@@ -59,15 +66,32 @@ class _BikeDetailsState extends State<BikeDetails>
     return Stack(
       children: [
         _buildWelcomeAndUpdate(),
-        NotificationListener<UserScrollNotification>(
-          onNotification: _onUserScrollNotification,
+        NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            print(notification.runtimeType);
+            if (notification is ScrollUpdateNotification) {
+              if (!_slideOut && ((_isPassedScrollThreshold(notification)))) {
+                setState(() {
+                  _slideOut = true;
+                  animationController.forward();
+                });
+              } else if (_isAtStartEdge(notification)) {
+                setState(() {
+                  _slideOut = false;
+                  animationController.reverse();
+                });
+              }
+            }
+            return true;
+          },
           child: SingleChildScrollView(
             child: LayoutBuilder(builder: (_, __) {
+              _welcomeAndMessageHeight = _getWelcomeAndUpdateHeight();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: _getWelcomeAndUpdateHeight(),
+                    height: _welcomeAndMessageHeight,
                   ),
                   buildBike(context),
                   buildRide(context),
@@ -87,37 +111,17 @@ class _BikeDetailsState extends State<BikeDetails>
     );
   }
 
-  bool _onUserScrollNotification(UserScrollNotification notification) {
-    switch (notification.direction) {
-      case ScrollDirection.idle:
-        if (_isAtStartEdge(notification)) {
-          setState(() {
-            _slideOut = false;
-            animationController.reverse();
-          });
-        }
-        break;
-      case ScrollDirection.forward:
-        break;
-      case ScrollDirection.reverse:
-        if (!_slideOut && (_isPassedScrollThreshold(notification))) {
-          setState(() {
-            _slideOut = true;
-            animationController.forward();
-          });
-        }
-        break;
-    }
-    return true;
+  bool _isPassedScrollThreshold(ScrollUpdateNotification notification) {
+    print(notification.metrics.pixels);
+    return notification.metrics.pixels > 40;
   }
 
-  bool _isPassedScrollThreshold(UserScrollNotification notification) {
-    return notification.metrics.extentAfter <
-        notification.metrics.maxScrollExtent - 40;
-  }
-
-  bool _isAtStartEdge(UserScrollNotification notification) {
-    return notification.metrics.atEdge && notification.metrics.extentAfter != 0;
+  bool _isAtStartEdge(ScrollUpdateNotification notification) {
+    // for some reason on android pixels doesn't reach zero,so we put the
+    // threshold to 5 just to be safe.
+    return (notification.metrics.pixels - notification.metrics.minScrollExtent)
+            .abs() <
+        5;
   }
 
   Widget buildRide(BuildContext context) {
@@ -240,6 +244,7 @@ class _BikeDetailsState extends State<BikeDetails>
   Widget _buildBikeInfoList(List<BaseBikeInfo> data) {
     return ListView.separated(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, index) {
         final item = data[index];
